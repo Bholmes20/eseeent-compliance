@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — ESEE Enterprises</title>
+  <meta name="description" content="Contact ESEE Enterprises to request AI automation or business consulting services. SMS messaging is optional and never required to use our services.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>ESEE Enterprises</h1>
+    <p>Contact Us</p>
+  </header>
+  <nav>
+    <a href="/">Home</a>
+    <a href="privacy">Privacy Policy</a>
+    <a href="terms">Terms &amp; Conditions</a>
+  </nav>
+  <main>
+
+    <h2>Request a Consultation</h2>
+    <p>Fill out the form below to request a service, schedule a consultation, or ask a question. Fields marked <span class="required-marker">*</span> are required. SMS messaging is optional — you can submit this form and use our services without providing a phone number or consenting to SMS.</p>
+
+    <form id="contact-form" novalidate>
+
+      <!-- Name -->
+      <div class="field-group">
+        <label for="name">Full Name <span class="required-marker">*</span></label>
+        <input type="text" id="name" name="name" required autocomplete="name" placeholder="Your full name">
+        <span class="field-error" id="name-error">Please enter your full name.</span>
+      </div>
+
+      <!-- Email -->
+      <div class="field-group">
+        <label for="email">Email Address <span class="required-marker">*</span></label>
+        <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com">
+        <span class="field-error" id="email-error">Please enter a valid email address.</span>
+      </div>
+
+      <!-- Phone (optional — only needed if opting in to SMS) -->
+      <div class="field-group">
+        <label for="phone">Phone Number <span class="optional-label">(optional — only required if you consent to SMS below)</span></label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="(555) 000-0000">
+        <span class="field-error" id="phone-error">A phone number is required to receive SMS messages.</span>
+      </div>
+
+      <!-- Service Requested -->
+      <div class="field-group">
+        <label for="service">Service Requested <span class="required-marker">*</span></label>
+        <select id="service" name="service" required>
+          <option value="">Select a service…</option>
+          <option value="ai-automation">AI Automation</option>
+          <option value="gbp-optimization">Google Business Profile Optimization</option>
+          <option value="crm-automation">CRM Automation &amp; Management</option>
+          <option value="lead-generation">Lead Generation &amp; Prospecting</option>
+          <option value="appointment-scheduling">Appointment Scheduling</option>
+          <option value="customer-support">Customer Support Automation</option>
+          <option value="general-consultation">General Consultation</option>
+        </select>
+        <span class="field-error" id="service-error">Please select a service.</span>
+      </div>
+
+      <!-- Message -->
+      <div class="field-group">
+        <label for="message">Message <span class="optional-label">(optional)</span></label>
+        <textarea id="message" name="message" rows="4" placeholder="Tell us about your business and how we can help."></textarea>
+      </div>
+
+      <!-- ── SMS CONSENT — ENTIRELY OPTIONAL ──────────────────────────── -->
+      <div class="sms-section">
+        <h3 class="sms-section-title">SMS Messaging <span class="optional-badge">Optional</span></h3>
+
+        <div class="highlight-box sms-not-required-box">
+          <p><strong>Consent to receive SMS messages is not a condition of purchase, account creation, or use of ESEE Enterprises services.</strong> You may submit this form and fully access our services without checking the box below.</p>
+        </div>
+
+        <label class="checkbox-label" for="sms-consent">
+          <input type="checkbox" id="sms-consent" name="sms_consent" value="yes">
+          <span class="checkbox-text">
+            By checking this box, I agree to receive SMS messages from ESEE Enterprises related to appointments, service updates, and business communications.
+          </span>
+        </label>
+
+        <div class="sms-disclosure">
+          <ul>
+            <li>Message frequency varies, up to <strong>10 messages per month</strong>.</li>
+            <li><strong>Message and data rates may apply.</strong></li>
+            <li>Reply <strong>STOP</strong> to opt out at any time.</li>
+            <li>Reply <strong>HELP</strong> for assistance, or contact <a href="mailto:bholmes@eseeent.com">bholmes@eseeent.com</a>.</li>
+          </ul>
+          <p class="policy-links">
+            By checking the box above, you agree to our
+            <a href="privacy">Privacy Policy</a> and
+            <a href="terms">Terms &amp; Conditions</a>.
+            Mobile information and messaging consent will not be shared with third parties or affiliates for marketing or promotional purposes.
+          </p>
+        </div>
+      </div>
+      <!-- ─────────────────────────────────────────────────────────────── -->
+
+      <div class="submit-row">
+        <button type="submit" class="submit-btn">Send Message</button>
+        <p class="submit-note">Submitting this form does not sign you up for SMS messages unless you checked the box above.</p>
+      </div>
+
+    </form>
+
+    <!-- Success state (shown after submit, replaces form) -->
+    <div id="success-message" class="success-message" style="display:none" role="alert">
+      <div class="success-icon">&#10003;</div>
+      <h3>Message Sent</h3>
+      <p>Thank you — we'll be in touch shortly at the email address you provided.</p>
+      <p id="sms-confirm"></p>
+    </div>
+
+  </main>
+  <footer>
+    <p>&copy; 2026 ESEE Enterprises. All rights reserved.</p>
+    <p><a href="privacy">Privacy Policy</a> | <a href="terms">Terms &amp; Conditions</a></p>
+  </footer>
+
+  <script>
+    (function () {
+      var form    = document.getElementById('contact-form');
+      var success = document.getElementById('success-message');
+      var smsBox  = document.getElementById('sms-consent');
+      var phoneInput = document.getElementById('phone');
+      var phoneError = document.getElementById('phone-error');
+
+      function show(el) { el.style.display = 'block'; }
+      function hide(el) { el.style.display = 'none'; }
+      function val(id)  { return document.getElementById(id).value.trim(); }
+
+      function markError(inputId, errorId, show) {
+        var input = document.getElementById(inputId);
+        var err   = document.getElementById(errorId);
+        if (show) {
+          input.classList.add('input-error');
+          err.style.display = 'block';
+        } else {
+          input.classList.remove('input-error');
+          err.style.display = 'none';
+        }
+      }
+
+      /* If user checks SMS consent, phone becomes required */
+      smsBox.addEventListener('change', function () {
+        if (smsBox.checked) {
+          phoneInput.setAttribute('required', 'required');
+          phoneInput.closest('.field-group').querySelector('label').innerHTML =
+            'Phone Number <span class="required-marker">*</span> <span class="optional-label">(required for SMS)</span>';
+        } else {
+          phoneInput.removeAttribute('required');
+          phoneInput.closest('.field-group').querySelector('label').innerHTML =
+            'Phone Number <span class="optional-label">(optional — only required if you consent to SMS below)</span>';
+          markError('phone', 'phone-error', false);
+        }
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var ok = true;
+
+        if (!val('name'))    { markError('name',    'name-error',    true);  ok = false; }
+        else                 { markError('name',    'name-error',    false); }
+
+        if (!val('email') || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('email'))) {
+                               markError('email',   'email-error',   true);  ok = false; }
+        else                 { markError('email',   'email-error',   false); }
+
+        if (!val('service')) { markError('service', 'service-error', true);  ok = false; }
+        else                 { markError('service', 'service-error', false); }
+
+        if (smsBox.checked && !val('phone')) {
+                               markError('phone',   'phone-error',   true);  ok = false; }
+        else                 { markError('phone',   'phone-error',   false); }
+
+        if (!ok) return;
+
+        hide(form);
+        show(success);
+        document.getElementById('sms-confirm').textContent = smsBox.checked
+          ? 'You have opted in to SMS messages. Reply STOP at any time to unsubscribe.'
+          : 'You did not opt in to SMS messages. You will not receive text messages from us.';
+      });
+    }());
+  </script>
+</body>
+</html>
